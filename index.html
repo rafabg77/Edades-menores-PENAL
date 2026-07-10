@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>EXPEDIENTE 17-18-19 // UNIDAD DE MENORES</title>
+<style>
+:root{
+  --blood:#8a0303;
+  --blood-bright:#c40808;
+  --ink:#0a0a0a;
+  --paper:#e8e0d0;
+  --tape:#d4c840;
+  --ok:#1a7a1a;
+  --bad:#8a0303;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:#050505;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(138,3,3,0.08), transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(138,3,3,0.08), transparent 50%);
+  color:var(--paper);
+  font-family:'Courier New', monospace;
+  min-height:100vh;
+  padding:20px;
+  position:relative;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 2px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 2px);
+  pointer-events:none;
+  z-index:1;
+}
+.splat{
+  position:fixed;
+  border-radius:50% 40% 60% 45%;
+  background:radial-gradient(circle, var(--blood-bright), var(--blood) 70%, transparent 100%);
+  opacity:0.35;
+  filter:blur(1px);
+  pointer-events:none;
+  z-index:0;
+}
+.container{max-width:900px;margin:0 auto;position:relative;z-index:2;}
+
+.header{
+  border:3px solid var(--blood-bright);
+  background:linear-gradient(180deg, rgba(20,0,0,0.9), rgba(5,0,0,0.95));
+  padding:25px 20px;
+  margin-bottom:30px;
+  position:relative;
+  box-shadow:0 0 40px rgba(138,3,3,0.4), inset 0 0 60px rgba(138,3,3,0.15);
+}
+.header::before, .header::after{
+  content:"";
+  position:absolute;
+  width:60px;height:26px;
+  background:var(--tape);
+  opacity:0.75;
+  box-shadow:0 2px 4px rgba(0,0,0,0.5);
+}
+.header::before{top:-14px;left:30px;transform:rotate(-6deg);}
+.header::after{top:-14px;right:30px;transform:rotate(5deg);}
+
+.badge-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:11px;letter-spacing:2px;color:#a08888;}
+.stamp{
+  border:2px solid var(--blood-bright);
+  color:var(--blood-bright);
+  padding:2px 8px;
+  transform:rotate(-3deg);
+  font-weight:bold;
+  display:inline-block;
+}
+h1{
+  font-size:clamp(22px,5vw,34px);
+  text-transform:uppercase;
+  letter-spacing:3px;
+  color:var(--paper);
+  text-shadow:0 0 15px var(--blood-bright), 2px 2px 0 #000;
+  text-align:center;
+  margin:10px 0;
+}
+h1 span{color:var(--blood-bright);}
+.subtitle{
+  text-align:center;
+  color:#b09a9a;
+  font-size:13px;
+  letter-spacing:1px;
+  margin-top:6px;
+  border-top:1px dashed #4a2020;
+  padding-top:10px;
+}
+
+.progress-wrap{
+  background:#1a0a0a;
+  border:1px solid var(--blood);
+  height:22px;
+  margin:20px 0;
+  position:relative;
+  overflow:hidden;
+}
+.progress-bar{
+  height:100%;
+  background:repeating-linear-gradient(45deg, var(--blood), var(--blood) 10px, var(--blood-bright) 10px, var(--blood-bright) 20px);
+  width:0%;
+  transition:width .4s ease;
+  box-shadow:0 0 10px var(--blood-bright);
+}
+.progress-label{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;letter-spacing:2px;color:#fff;text-shadow:1px 1px 2px #000;
+}
+
+.stats-row{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:#a08888;margin-bottom:10px;letter-spacing:1px;
+}
+.stats-row b{color:var(--paper);}
+
+.card{
+  border:2px solid #4a2020;
+  background:linear-gradient(180deg, rgba(20,14,10,0.95), rgba(10,7,5,0.98));
+  padding:30px 25px;
+  position:relative;
+  box-shadow:0 10px 40px rgba(0,0,0,0.7), inset 0 0 30px rgba(138,3,3,0.08);
+  min-height:340px;
+  display:flex;flex-direction:column;
+}
+.card::before{
+  content:"CONFIDENCIAL";
+  position:absolute;
+  top:10px;right:-40px;
+  background:var(--blood);
+  color:#fff;
+  font-size:10px;
+  padding:3px 45px;
+  transform:rotate(35deg);
+  letter-spacing:2px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.5);
+}
+.case-meta{
+  font-size:11px;color:#8a6a6a;letter-spacing:1px;margin-bottom:14px;
+  display:flex;gap:14px;flex-wrap:wrap;
+}
+.case-meta span{border:1px solid #4a2020;padding:2px 8px;}
+
+.question-label{
+  font-size:11px;color:var(--blood-bright);letter-spacing:3px;margin-bottom:10px;
+}
+.question-text{
+  font-size:clamp(16px,2.6vw,20px);
+  color:var(--paper);
+  line-height:1.5;
+  margin-bottom:8px;
+  font-weight:bold;
+}
+.question-crime{
+  font-size:15px;
+  color:#e0b0b0;
+  border-left:3px solid var(--blood-bright);
+  padding-left:12px;
+  margin:14px 0 20px;
+  line-height:1.5;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:auto;
+}
+@media (max-width:520px){.options{grid-template-columns:1fr;}}
+
+.opt{
+  border:2px solid #4a2020;
+  background:rgba(30,15,15,0.6);
+  color:var(--paper);
+  padding:16px 10px;
+  font-family:'Courier New',monospace;
+  font-size:14px;
+  letter-spacing:1px;
+  cursor:pointer;
+  transition:all .15s ease;
+  text-transform:uppercase;
+  font-weight:bold;
+}
+.opt:hover:not(:disabled){
+  border-color:var(--blood-bright);
+  background:rgba(138,3,3,0.25);
+  transform:translateY(-2px);
+  box-shadow:0 6px 14px rgba(138,3,3,0.4);
+}
+.opt:disabled{cursor:default;}
+.opt.correct{
+  background:rgba(20,80,20,0.5);
+  border-color:var(--ok);
+  color:#a0ffa0;
+  box-shadow:0 0 20px rgba(26,122,26,0.6);
+}
+.opt.wrong{
+  background:rgba(80,10,10,0.6);
+  border-color:var(--bad);
+  color:#ffb0b0;
+  box-shadow:0 0 20px rgba(138,3,3,0.6);
+  animation:shake .3s;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  25%{transform:translateX(-6px);}
+  75%{transform:translateX(6px);}
+}
+
+.feedback{
+  margin-top:16px;
+  padding:12px 14px;
+  border-left:4px solid var(--blood-bright);
+  background:rgba(0,0,0,0.4);
+  font-size:13px;
+  line-height:1.5;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback.ok{border-color:var(--ok);color:#c0ffc0;}
+.feedback.bad{border-color:var(--bad);color:#ffc0c0;}
+
+.controls{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:22px;
+}
+.btn{
+  border:2px solid var(--blood-bright);
+  background:transparent;
+  color:var(--paper);
+  padding:10px 22px;
+  font-family:'Courier New',monospace;
+  font-weight:bold;
+  letter-spacing:2px;
+  cursor:pointer;
+  text-transform:uppercase;
+  font-size:13px;
+  transition:all .2s;
+}
+.btn:hover:not(:disabled){background:var(--blood-bright);color:#fff;box-shadow:0 0 20px var(--blood-bright);}
+.btn:disabled{opacity:0.3;cursor:not-allowed;}
+
+.article-tag{
+  font-size:11px;color:#7a5a5a;letter-spacing:1px;margin-top:16px;
+}
+
+/* End screen */
+.end-screen{display:none;text-align:center;padding:40px 20px;}
+.end-screen.show{display:block;}
+.end-title{font-size:28px;letter-spacing:3px;margin-bottom:16px;text-shadow:0 0 20px var(--blood-bright);}
+.end-score{font-size:60px;font-weight:bold;color:var(--blood-bright);text-shadow:0 0 30px var(--blood-bright);margin:10px 0;}
+.end-msg{color:#c0a0a0;margin:16px 0 30px;font-size:14px;line-height:1.6;}
+.fail-list{
+  text-align:left;
+  max-height:300px;
+  overflow-y:auto;
+  border:1px solid #4a2020;
+  padding:14px;
+  margin:20px 0;
+  background:rgba(0,0,0,0.4);
+  font-size:12px;
+  line-height:1.8;
+}
+.fail-list div{border-bottom:1px dashed #4a2020;padding:6px 0;}
+.fail-list b{color:var(--blood-bright);}
+
+.hidden{display:none;}
+footer{
+  text-align:center;color:#5a4040;font-size:10px;letter-spacing:2px;margin:30px 0 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="badge-row">
+      <span>UNIDAD DE MENORES · CNP</span>
+      <span class="stamp">EN INVESTIGACIÓN</span>
+    </div>
+    <h1>EXPEDIENTE <span>17 · 18 · 19</span></h1>
+    <div class="subtitle">TEST DE EDADES PENALES — CÓDIGO PENAL ESPAÑOL<br>CADA CASO SIN RESOLVER ES UNA VÍCTIMA SIN JUSTICIA</div>
+  </div>
+
+  <div id="quizArea">
+    <div class="stats-row">
+      <div>CASO <b id="qNum">1</b> / <b id="qTotal">1</b></div>
+      <div>ACIERTOS: <b id="hitCount" style="color:#7fff7f">0</b> &nbsp; FALLOS: <b id="missCount" style="color:#ff7f7f">0</b></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+      <div class="progress-label" id="progressLabel">0% RESUELTO</div>
+    </div>
+
+    <div class="card">
+      <div class="case-meta">
+        <span id="temaTag">TEMA —</span>
+        <span id="artTag">ART. —</span>
+        <span id="caseId">CASO Nº 000</span>
+      </div>
+      <div class="question-label">▸ INTERROGATORIO — DETERMINE LA EDAD DE LA VÍCTIMA</div>
+      <div class="question-text" id="qDelito">Delito:</div>
+      <div class="question-crime" id="qDesc">Descripción del hallazgo forense...</div>
+
+      <div class="options" id="optionsBox"></div>
+
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="restartBtn">🩸 REINICIAR EXPEDIENTE</button>
+      <button class="btn" id="nextBtn" disabled>SIGUIENTE CASO ▸</button>
+    </div>
+  </div>
+
+  <div class="end-screen" id="endScreen">
+    <div class="end-title">EXPEDIENTE CERRADO</div>
+    <div class="end-score" id="finalScore">0%</div>
+    <div class="end-msg" id="endMsg"></div>
+    <div id="failListWrap" class="hidden">
+      <div style="font-size:12px;letter-spacing:2px;color:#c88;margin-bottom:8px;">▸ CASOS SIN RESOLVER — REVISAR EXPEDIENTE</div>
+      <div class="fail-list" id="failList"></div>
+    </div>
+    <button class="btn" id="restartBtn2">🩸 REABRIR EXPEDIENTE DESDE CERO</button>
+  </div>
+
+  <footer>SOLO PARA USO INTERNO · POLICÍA JUDICIAL · TEMAS 17 / 18 / 19</footer>
+</div>
+
+<script>
+// ===== BANCO DE CASOS =====
+const OPTIONS = ["Menores", "Menores de 16", "Menores de 14"];
+
+const cases = [
+  {tema:17, art:"143.1", delito:"Suicidio", desc:"Si el sujeto pasivo es menor o discapacitado, la inducción/cooperación al suicidio se reconduce a autoría mediata de homicidio/asesinato.", ans:"Menores"},
+  {tema:17, art:"143 bis", delito:"Difusión del suicidio", desc:"Distribución/difusión pública por internet o TIC de contenidos destinados a promover, fomentar o incitar al suicidio de menores o PDNEP.", ans:"Menores"},
+  {tema:17, art:"149", delito:"Lesiones — pérdida de órgano o miembro principal", desc:"Si la víctima fuera de esta edad o PDNEP, el juez puede aplicar inhabilitación especial para patria potestad, tutela, curatela, guarda o acogimiento.", ans:"Menores"},
+  {tema:17, art:"153.1 / 153.3", delito:"Violencia intrafamiliar", desc:"La inhabilitación especial potestativa se aplica adecuada al interés de la víctima de esta condición o PDNEP. Agravante: perpetrarse en su presencia.", ans:"Menores"},
+  {tema:17, art:"155", delito:"Lesiones consentidas", desc:"El consentimiento válido exige ser libre, espontáneo y expresamente emitido; no será válido el otorgado por alguien de esta condición o PDNEP.", ans:"Menores"},
+  {tema:17, art:"156", delito:"Trasplantes, esterilizaciones y cirugía transexual", desc:"No será válido el consentimiento obtenido viciadamente, mediante precio, o si el otorgante tiene esta condición o carece de aptitud para prestarlo.", ans:"Menores"},
+  {tema:17, art:"156 bis.3", delito:"Tráfico de órganos", desc:"Tipo agravado si la víctima tiene esta condición o es especialmente vulnerable por edad, discapacidad, enfermedad o situación.", ans:"Menores"},
+  {tema:17, art:"156 ter", delito:"Difusión de autolesiones", desc:"Se castiga la distribución pública de contenidos destinados a promover, fomentar o incitar a la autolesión de personas de esta condición o PDNEP.", ans:"Menores"},
+  {tema:17, art:"156 quinquies", delito:"Inhabilitación especial por contacto con menores", desc:"Condenados por 147.1, 148, 149, 150 y 153 cuando la víctima tenga esta edad podrán ser inhabilitados para actividades con contacto regular y directo con menores.", ans:"Menores"},
+  {tema:17, art:"171.4 / 171.5", delito:"Amenazas leves de género y domésticas", desc:"Inhabilitación especial potestativa adecuada al interés del menor o PDNEP. Agravante común: perpetrarse en presencia de menores.", ans:"Menores"},
+  {tema:17, art:"172.2", delito:"Coacciones", desc:"Inhabilitación potestativa adecuada al interés del menor o PDNEP; agravante si se perpetra en presencia de menores.", ans:"Menores"},
+  {tema:17, art:"172 bis.3", delito:"Matrimonio forzado", desc:"Tipo agravado cuando la víctima tenga esta edad.", ans:"Menores"},
+  {tema:17, art:"172 ter.1 / .5", delito:"Acoso o \"stalking\"", desc:"Se agrava la pena si la víctima presenta especial vulnerabilidad por edad; también se agrava el uso indebido de imagen cuando la víctima tenga esta condición.", ans:"Menores"},
+  {tema:17, art:"173.2", delito:"Trato degradante — violencia habitual", desc:"Se protege a quienes tengan esta edad y convivan con el agresor o estén sujetos a su potestad, tutela, curatela, acogimiento o guarda de hecho.", ans:"Menores"},
+  {tema:17, art:"174.2", delito:"Tortura en centros de protección/corrección", desc:"Se equipara a la tortura la cometida por autoridad o funcionario de instituciones penitenciarias o centros de protección-corrección de esta condición contra detenidos, internos o presos.", ans:"Menores"},
+  {tema:17, art:"Título VIII (intro)", delito:"Delitos contra la libertad sexual — BJP", desc:"En el caso de personas con esta condición, el bien jurídico protegido puede denominarse \"indemnidad sexual\" en lugar de libertad sexual.", ans:"Menores"},
+  {tema:17, art:"180.1.3ª", delito:"Agresión sexual — agravante por vulnerabilidad", desc:"Es agravante que los hechos se cometan contra una persona en situación de especial vulnerabilidad por edad (salvo lo dispuesto en el art. 181).", ans:"Menores"},
+  {tema:17, art:"184.4", delito:"Acoso sexual", desc:"Agravante si la víctima presenta especial vulnerabilidad por edad, enfermedad o discapacidad.", ans:"Menores"},
+  {tema:17, art:"185 / 186", delito:"Exhibicionismo obsceno y provocación sexual", desc:"Se castiga ejecutar actos de exhibición obscena, o vender/difundir/exhibir material pornográfico, ante o entre personas de esta edad o PDNEP.", ans:"Menores"},
+  {tema:17, art:"188.1 / 188.4 (tipo base)", delito:"Prostitución de menores — tipo base", desc:"Si la víctima tiene esta edad o es PDNEP: prisión de 2 a 5 años + multa; en la modalidad de solicitud de relación sexual: prisión de 1 a 4 años.", ans:"Menores"},
+  {tema:17, art:"188.1 / 188.4 (tipo agravado)", delito:"Prostitución de menores — tipo agravado", desc:"Si la víctima tiene esta edad: prisión de 4 a 8 años + multa; en la modalidad de solicitud de relación sexual: prisión de 2 a 6 años.", ans:"Menores de 16"},
+  {tema:17, art:"189.1 / 189.4 (tipo base)", delito:"Explotación sexual / corrupción de menores — tipo base", desc:"Captar o utilizar a una persona de esta edad o PDNEP con fines o en espectáculos exhibicionistas o pornográficos.", ans:"Menores"},
+  {tema:17, art:"189.2.a", delito:"Explotación sexual / corrupción de menores — tipo agravado", desc:"Se agrava la pena (5 a 9 años de prisión) cuando se utiliza a una persona de esta edad.", ans:"Menores de 16"},
+  {tema:17, art:"189.1.g", delito:"Explotación sexual — sujeto activo cualificado", desc:"Se agrava la pena cuando el autor (ascendiente, tutor, curador, guardador, maestro, conviviente) haya abusado de su posición de confianza respecto de una persona de esta edad o PDNEP.", ans:"Menores"},
+  {tema:17, art:"189.4", delito:"Asistencia a espectáculos exhibicionistas/pornográficos", desc:"Se castiga asistir a sabiendas a espectáculos en los que participen personas de esta edad o PDNEP.", ans:"Menores"},
+  {tema:17, art:"189.6 / 189.7", delito:"Explotación sexual — delito de omisión", desc:"Tener bajo potestad, tutela, guarda o acogimiento a un menor o PDNEP y no hacer lo posible para impedir su estado de prostitución/corrupción.", ans:"Menores"},
+  {tema:17, art:"191.1", delito:"Perseguibilidad de delitos contra la libertad sexual", desc:"Excepción a la exigencia de denuncia previa: si la víctima tiene esta edad, es PDNEP o persona desvalida, basta la denuncia del Ministerio Fiscal.", ans:"Menores"},
+  {tema:17, art:"192.2", delito:"Libertad vigilada y agravantes", desc:"Agravante cuando ascendientes, tutores, curadores, guardadores, maestros u otra persona encargada intervengan como autores/cómplices de los delitos del Título VIII contra un menor o PDNEP.", ans:"Menores"},
+  {tema:17, art:"181", delito:"Agresión sexual a menores", desc:"Realizar actos de carácter sexual con una persona de esta edad, incluidos los que el propio menor realice con un tercero o sobre sí mismo a instancia del autor.", ans:"Menores de 16"},
+  {tema:17, art:"182", delito:"Exhibición a menores", desc:"Se castiga hacer presenciar, con fines sexuales, a una persona de esta edad actos de carácter sexual, aunque el autor no participe en ellos.", ans:"Menores de 16"},
+  {tema:17, art:"183.1 / 183.2", delito:"Child grooming y embaucamiento de pornografía", desc:"Contactar con una persona de esta edad por internet, teléfono o TIC para proponer un encuentro o para embaucarla a facilitar material pornográfico.", ans:"Menores de 16"},
+  {tema:17, art:"183 bis", delito:"Exclusión de responsabilidad por consentimiento del menor", desc:"El libre consentimiento de una persona de esta edad excluye la responsabilidad penal cuando el autor sea próximo por edad y grado de desarrollo o madurez.", ans:"Menores de 16"},
+  {tema:17, art:"148.3", delito:"Lesiones — agravante potestativa", desc:"Se agrava potestativamente la pena de las lesiones del art. 147.1 cuando la víctima tenga esta edad o sea PDNEP.", ans:"Menores de 14"},
+  {tema:17, art:"140.1.a", delito:"Asesinato — Prisión Permanente Revisable", desc:"Se aplica la Prisión Permanente Revisable cuando la víctima tenga esta edad o sea persona especialmente vulnerable por edad, enfermedad o discapacidad.", ans:"Menores de 16"},
+  {tema:17, art:"165", delito:"Detención ilegal / secuestro agravado", desc:"Se agrava la pena si la víctima tiene esta edad, es PDNEP o funcionario público en el ejercicio de sus funciones.", ans:"Menores"},
+  {tema:17, art:"166.2", delito:"Desaparición forzosa", desc:"Se agrava la pena si la víctima tiene esta edad o es PDNEP.", ans:"Menores"},
+  {tema:18, art:"235.8", delito:"Hurto — agravante", desc:"Se agrava el hurto cuando se utiliza a personas de esta edad para la comisión del delito.", ans:"Menores de 16"},
+];
+
+// ===== ESTADO =====
+let order = [];
+let idx = 0;
+let hits = 0;
+let misses = 0;
+let answered = false;
+let failedCases = [];
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function initQuiz(){
+  order = shuffle(cases.map((_,i)=>i));
+  idx = 0; hits = 0; misses = 0; answered = false; failedCases = [];
+  document.getElementById('qTotal').textContent = cases.length;
+  document.getElementById('endScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  spawnSplats();
+  renderQuestion();
+}
+
+function spawnSplats(){
+  document.querySelectorAll('.splat').forEach(e=>e.remove());
+  for(let i=0;i<5;i++){
+    const s = document.createElement('div');
+    s.className='splat';
+    const size = 60+Math.random()*140;
+    s.style.width = size+'px';
+    s.style.height = size+'px';
+    s.style.top = Math.random()*100+'vh';
+    s.style.left = Math.random()*100+'vw';
+    document.body.appendChild(s);
+  }
+}
+
+function renderQuestion(){
+  answered = false;
+  const c = cases[order[idx]];
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('hitCount').textContent = hits;
+  document.getElementById('missCount').textContent = misses;
+  document.getElementById('temaTag').textContent = 'TEMA '+c.tema;
+  document.getElementById('artTag').textContent = 'ART. '+c.art;
+  document.getElementById('caseId').textContent = 'CASO Nº '+String(order[idx]+1).padStart(3,'0');
+  document.getElementById('qDelito').textContent = 'Delito: '+c.delito;
+  document.getElementById('qDesc').textContent = c.desc;
+
+  const pct = Math.round((idx/cases.length)*100);
+  document.getElementById('progressBar').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = pct+'% RESUELTO';
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.textContent='';
+
+  const box = document.getElementById('optionsBox');
+  box.innerHTML='';
+  OPTIONS.forEach(opt=>{
+    const b = document.createElement('button');
+    b.className='opt';
+    b.textContent = opt;
+    b.onclick = ()=>selectAnswer(b, opt, c);
+    box.appendChild(b);
+  });
+
+  document.getElementById('nextBtn').disabled = true;
+}
+
+function selectAnswer(btn, opt, c){
+  if(answered) return;
+  answered = true;
+  const allBtns = document.querySelectorAll('.opt');
+  allBtns.forEach(b=>{
+    b.disabled = true;
+    if(b.textContent === c.ans) b.classList.add('correct');
+  });
+  const fb = document.getElementById('feedback');
+  if(opt === c.ans){
+    hits++;
+    btn.classList.add('correct');
+    fb.classList.add('show','ok');
+    fb.textContent = '✔ CASO RESUELTO. Fragmento del temario: "'+c.desc+'"';
+  } else {
+    misses++;
+    btn.classList.add('wrong');
+    failedCases.push(c);
+    fb.classList.add('show','bad');
+    fb.textContent = '✘ PISTA FALSA. La respuesta correcta es "'+c.ans+'". Fragmento: "'+c.desc+'"';
+  }
+  document.getElementById('hitCount').textContent = hits;
+  document.getElementById('missCount').textContent = misses;
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQuestion(){
+  if(!answered) return;
+  idx++;
+  if(idx >= cases.length){
+    showEnd();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showEnd(){
+  document.getElementById('quizArea').style.display = 'none';
+  const pct = Math.round((hits/cases.length)*100);
+  document.getElementById('finalScore').textContent = pct+'%';
+  const es = document.getElementById('endScreen');
+  es.classList.add('show');
+  const msg = document.getElementById('endMsg');
+  if(pct === 100){
+    msg.textContent = 'EXPEDIENTE CERRADO CON ÉXITO TOTAL. Conoce con precisión forense la edad exacta de cada víctima en los Temas 17, 18 y 19. Caso archivado como RESUELTO.';
+  } else if(pct >= 80) {
+    msg.textContent = 'Investigación sólida, pero quedan cabos sueltos. Revise los casos marcados abajo antes de dar el expediente por cerrado.';
+  } else {
+    msg.textContent = 'El expediente sigue abierto. Demasiadas pistas mal interpretadas. Vuelva a interrogar cada caso hasta alcanzar el 100%.';
+  }
+  const wrap = document.getElementById('failListWrap');
+  const list = document.getElementById('failList');
+  list.innerHTML='';
+  if(failedCases.length>0){
+    wrap.classList.remove('hidden');
+    failedCases.forEach(c=>{
+      const d = document.createElement('div');
+      d.innerHTML = '<b>'+c.ans+'</b> — '+c.delito+' (Tema '+c.tema+', art. '+c.art+')';
+      list.appendChild(d);
+    });
+  } else {
+    wrap.classList.add('hidden');
+  }
+}
+
+document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+document.getElementById('restartBtn').addEventListener('click', initQuiz);
+document.getElementById('restartBtn2').addEventListener('click', initQuiz);
+
+initQuiz();
+</script>
+</body>
+</html>
